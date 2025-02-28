@@ -1,26 +1,23 @@
-import math
+import heapq,math
 from itertools import combinations
 def distance(i,j):
     return abs(i[0]-j[0])+abs(i[1]-j[1])
 
 n,k=map(int,input().split()) #n개 집, k개 대피소
-homes=[]
+home=[]
 for _ in range(n):
     x,y=map(int,input().split())
-    homes.append((x,y))
-
-answer=math.inf
-for daepis in combinations(homes, k): #대피소 지정
-    max_d=-1
-    for other in homes:
-        min_d=math.inf
-        if other in daepis:
-            continue
-        for daepi in daepis:
-            dist=distance(daepi,other)
-            if min_d>dist:
-                min_d=dist
-        if max_d<min_d:
-            max_d=min_d
-    answer=min(answer,max_d)
-print(answer)
+    home.append((x,y))
+    
+nCr = combinations(home, k)
+answer=[]
+for daepi in nCr: #대피소 지정
+    result=0
+    for other in home:
+        if other not in daepi: #대피소가 아닌 집들
+            min_d=math.inf
+            for i in daepi: #대피소가 아닌 집들과 대피소인 집 거리 계산해서
+                min_d=min(min_d,distance(i,other))
+            result=max(min_d,result)
+    answer.append(result)
+print(min(answer))
